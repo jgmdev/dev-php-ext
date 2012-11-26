@@ -1,0 +1,575 @@
+Developing PHP Extensions
+-------------------------
+
+Table of Contents
+	
+	1. Introduction
+	
+	2. Building PHP
+		2.1 Linux
+		2.2 Windows
+			2.2.1 Requirements
+			2.2.2 Steps to Build
+		2.3 Mac
+	
+	3. Extensions Skeleton
+		3.1 Unix configuration file
+		3.2 Windows configuration file
+		3.3 Building the exension
+			3.3.1 Unix
+			3.3.2 Windows
+	
+	4. Variables
+		4.1 Arrays
+		4.2 Resources
+		4.3 Objects
+		
+	5. Functions
+		5.1 Working with Parameters
+		5.2 Returning Values
+	
+	6. Classes
+	
+	7. Namespaces
+
+
+
+1. Introduction
+========================================================================
+
+This document is a short tutorial and brief reference on how to develop
+PHP extensions/modules.
+
+
+
+2. Building PHP
+========================================================================
+
+Before you start developing a PHP extension the first thing you would need
+is the PHP source. You could get it by visiting http://php.net/downloads.php
+
+You will need a C or C++ compiler depending on the type of extension you
+are going to develop. For compiling PHP sources a C compiler is just fine,
+since PHP is developed in pure C including the extensions shipped with it.
+If you are going to develop a PHP extension that wraps/binds a C++ library
+then you should install a C++ compiler as well.
+
+	NOTE: PHP configure script uses the flag --enable-debug to include 
+	debugging symbols on the resulting binaries. It's strongly suggested
+	to use this flag, since it will help later if you have to do some 
+	debugging with tools like valgrind and gdb.
+
+
+
+2.1 Linux
+========================================================================
+
+There are two ways on which you can get everything needed to start
+developing on Linux. Use pre-compiled packages provided by your preferred
+Linux distribution or compile PHP from source.
+
+Most of the existing Linux distributions have ready to use packages to
+start developing PHP extensions. On Debian based distributions this
+package is usually named php5-dev, while on RPM based distributions
+like opensuse it is named php5-devel.
+	
+	Installing on debian based distribution:
+	
+		sudo apt-get install php5-dev
+
+	Installing on RPM based distributions:
+	
+		su && yum install php5-devel
+	
+Installing the package provided by your Linux distribution should 
+also take care of installing all the dependencies needed to compile PHP 
+extensions. The only drawback is that when developing PHP extensions 
+you will want a PHP binary that includes debugging symbols, so compiling
+from source with the --enable-debug flag would be the best. Fortunately 
+some Linux distributions also provide a package to install PHP binaries
+with unstripped debugging symbols.
+
+	Installing debugging symbols on Debian based distribution:
+	
+		sudo apt-get install php5-dbg
+		
+	This will install debugging binaries at:
+	
+		/usr/lib/debug/usr/bin/
+		
+If your Linux distribution don't ships with PHP debugging packages or
+if you want to develop with the most recent version of PHP, you will 
+have to compile your own version. The dependencies or requirements 
+needed to build are:
+
+	a) autoconf: 2.13+ (for PHP < 5.4.0), 2.59+ (for PHP >= 5.4.0)
+	b) automake: 1.4+
+	c) libtool: 1.4.x+ (except 1.4.2)
+	d) re2c: Version 0.13.4 or newer
+	e) flex: Version 2.5.4 (for PHP <= 5.2)
+	f) bison: Version 1.28 (preferred), 1.35, or 1.75
+	
+The steps to build on Linux should be something like follows:
+
+	tar -xvz php-5.4.3.tar.gz
+	cd php-5.4.3
+	./configure --disable-all --enable-cli --enable-debug
+	make
+	make install
+	
+To get more configuration options you can run:
+
+	./configure --help
+
+More details about building on Linux/Unix environments can be found at:	
+
+	http://www.php.net/manual/en/install.unix.php
+
+
+
+2.2 Windows
+========================================================================
+
+PHP building system on Windows almost emulates or mimics the autotools
+system used on unix systems to build software. This is done by a set of
+JScript files that define a lot of helper functions in combination of 
+bat files for executing them. You will have the .bat counterpart of a sh
+script, like for example configure.bat. With that said, configuring a 
+build of PHP on windows should be pretty similar to doing it on a Unix 
+system. The tricky part is setting the development environment.
+
+	NOTE: You will find the functionality needed to write a working
+	config.w32 for your extension on php-src/win32/build/confutils.js
+	This file is automatically appended to the generated configure.js 
+	file by buildconf.bat
+
+On Windows PHP relies on Microsoft Compilers, other compilers such as
+MingW or Clang aren't supported. Fortunately Microsoft has released a
+set of free tools to develop on the Windows operating system. 
+
+2.2.1 Requirements
+========================================================================
+
+Here is what you will need to install in order to successfully compile 
+PHP for windows:
+	
+a) Windows SDK 6.1
+----------------------------------
+	
+Microsoft distributes the software development kit in two forms, 
+Web Setup or DVD ISO. You can get either of those from the 
+following:
+	
+	* Web Setup
+	  http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=11310
+
+
+	* DVD ISO
+	  http://www.microsoft.com/downloads/details.aspx?FamilyId=F26B1AA4-741A-433A-9BE5-FA919850BDBF&displaylang=en
+
+b) Visual C++ 2008 Express Edition
+----------------------------------
+	
+Visual Studio 2008 is break into several components each giving support 
+to a specific language as the .Net platform. For PHP we only need the 
+Visual C++ version that you can get from the following link:
+
+	http://www.microsoft.com/visualstudio/en-us/products/2008-editions/express
+	
+c) PHP 5 binary tools
+----------------------------------
+
+The PHP team provides a set of ready to use packages with the tools
+and dependencies needed to build on windows. You will find them at
+the following link:
+		
+	http://windows.php.net/downloads/php-sdk/
+		
+At time of writing there are two versions of the binary tools:
+		
+	php-sdk-binary-tools-20110512.zip
+	php-sdk-binary-tools-20110915.zip
+		
+So download the latest version as it should work with either PHP 5.3 
+or 5.4 and follow the Steps to Build that explain how to use this file.
+	
+2.2.2 Steps to Build
+========================================================================
+
+By now you should have everything needed to start so here is the list 
+of steps needed:
+	
+a) Make the directory that will hold a working build system for PHP: 
+
+	mkdir c:\php-sdk
+	
+b) Extract the binary tools inside the directory c:\php-sdk leaving 
+you with:
+
+	c:\php-sdk\bin
+	c:\php-sdk\script
+		
+c) Open the Windows SDK 6.1 CMD Shell and do the following:
+	
+	setenv /release /x86 /xp
+	cd c:\php-sdk\
+	bin\phpsdk_setvars.bat
+	bin\phpsdk_buildtree.bat php53dev
+		
+d) Extract the php source files and place them in:
+
+	c:\php-sdk\php53dev\vc9\x86\php5.x.x (x.x stand for actual sub-version)
+		
+e) Compile the sources
+
+	cd c:\php-sdk\php53dev\vc9\x86\php5.x.x
+	buildconf
+	configure --disable-all --enable-cli --enable-debug
+	nmake
+
+
+After running  nmake you should end with a bare bone debugging version 
+of PHP that should serve you well for developing. For more configure
+options run:
+
+	configure --help
+	
+Keep in mind that some of the extensions have external dependencies that
+you should download and extract on the deps folder accompanying the 
+php5.x.x directory.
+
+More details can be found at:
+
+	http://www.php.net/manual/en/install.windows.php
+	https://wiki.php.net/internals/windows/stepbystepbuild
+
+
+2.3 Mac
+========================================================================
+
+New versions of Mac OSX already ship with PHP as PHP development tools.
+You will only need to install Xcode in order to have a working compiler
+and development environment.
+
+To get Xcode head to (http://developer.apple.com). You will need to 
+create a developer account in order to download the development tools.
+
+
+3. Extensions Skeleton
+========================================================================
+
+After setting up a working development environment you are ready to start
+developing. PHP provides a script that can generate a working source
+tree on which to start developing your extension, saving you from the 
+tedious task of preparing everything up in order to compile with the PHP
+build system. This script is located on php-src/ext. There are 2 flavors
+of the script one named ext_skel for unix environments developed using 
+shell scripting and that can be executed like:
+
+	./ext_skel
+	
+The other script is named ext_skel_win32.php programmed in php to 
+compensate for the lack of advanced batch scripting on the windows
+platform. It works similar to its unix counterpart with the difference
+that you will need to install some dependencies to make it work. For
+more details open the ext_skel_win32.php on a text editor and read the 
+comments on it of how to use it.
+
+If you execute the script without parameters you will get the available
+flags to use. The output of the script is something as follows:
+
+------------------------------------------------------------------------
+./ext_skel --extname=module [--proto=file] [--stubs=file] [--xml[=file]]
+           [--skel=dir] [--full-xml] [--no-help]
+
+  --extname=module   module is the name of your extension
+  --proto=file       file contains prototypes of functions to create
+  --stubs=file       generate only function stubs in file
+  --xml              generate xml documentation to be added to phpdoc-cvs
+  --skel=dir         path to the skeleton directory
+  --full-xml         generate xml documentation for a self-contained extension
+                     (not yet implemented)
+  --no-help          don't try to be nice and create comments in the code
+                     and helper functions to test if the module compiled
+------------------------------------------------------------------------
+
+So lets say that you execute it as './ext_skel --extname=myextension',
+this will generate a directory called "myextension" and inside that
+directory you will find the following:
+
+	tests
+		Directory that holds a series of php scripts to make sure the
+		extension is providing the functionality as it should.
+		
+	config.m4
+		Autoconf script with the instructions needed to build the 
+		extension on unix evironments.
+		
+	config.w32
+		JScript with the instructions needed to build the extension 
+		on windows evironment.
+		
+	CREDITS
+		A list of developers seperated by comma used to generate the
+		thanks information when building PHP.
+		
+	EXPERIMENTAL
+		Serves as a flag to indicate that the extension is alpha or
+		in planning stage.
+		
+	myextension.c
+		The actual C source code for the extension. Module initialization
+		code goes here as actual functions implementation.
+		
+	myextension.php
+		Runs the extension php test's to see if everything is working
+		as it should.
+		
+	php_myextension.h
+		Declarations or prototypes of functions or methods.
+	
+For more information on how to use the ext_skel script please refer to
+README.EXT_SKEL on the root dir of the PHP source tree. It explains all
+aspects of the script as using a definition file to automatically
+generate source code for function definitions etc...
+
+	NOTE: While the ext_skel script is an easy way to rapidly have a
+	working extension source tree, it hasn't been maintained over the
+	years. It may generate deprecated code, so use with cautious!
+ 
+
+4. Variables
+========================================================================
+
+The PHP engine uses a single structure that represents any variable 
+type supported by the language. The structure which you will be working 
+most of the time is the zval.
+
+Here is the list of types zval variable can hold as defined on 
+the Zend/zend.h header with a php example to represent them.
+
+	IS_NULL 
+		<?php $variable = null ?>
+		
+	IS_LONG
+		<?php $variable = 123456 ?>
+		
+	IS_DOUBLE
+		<?php $variable = 2.012 ?>
+		
+	IS_BOOL
+		<?php $variable = false ?>
+		
+	IS_ARRAY
+		<?php $variable = array("element1", "element2") ?>
+		
+	IS_OBJECT
+		<?php $variable = new ObjectType() ?>
+		
+	IS_STRING
+		<?php $variable = "text" ?>
+		
+	IS_RESOURCE
+		<?php $variable = fopen("file.txt") ?>
+		
+	IS_CONSTANT
+		<?php define("MY_CONSTANT", 1) ?> //Is this correct :S?
+		
+	IS_CONSTANT_ARRAY
+		[TO BE DONE]
+		
+	IS_CALLABLE
+		[TO BE DONE]
+
+The zval is defined as a typedef to a struct on php-src/Zend/zend.h as the 
+following:
+
+	typedef struct _zval_struct zval;
+
+	struct _zval_struct {
+		zvalue_value value;			/* Current Value */
+		zend_uint refcount__gc;		/* Count of variables that point to this one */
+		zend_uchar type;			/* Variable Type */
+		zend_uchar is_ref__gc;		/* Variable is reference of another one */
+	};
+
+The "value" property is an union also defined on the same file as the zval
+and it can hold any of the types mentioned before, it is defined as 
+follows:
+
+	typedef union _zvalue_value {
+		long lval;					/* integer value or resource id */
+		double dval;				/* double/float value */
+		struct {					/* String value and length */
+			char *val;
+			int len;
+		} str;						
+		HashTable *ht;				/* hash table to store array elements */
+		zend_object_value obj;		/* Object properties and information */
+	} zvalue_value;
+	
+You should never access zval properties directly since PHP internals
+can change on the future, something that would cause you extension code
+to stop working. Instead you should use a set of predefined macros 
+especially written to deal with them and ensure maximun future compatibility
+in the case the PHP internals change.
+		
+To check which type of data a zval holds you should use one of the
+following macros:
+
+	Macro					Translation
+	--------------			-----------
+	Z_TYPE(zval)		=	(zval).type
+	Z_TYPE_P(zval_p)	=	Z_TYPE(*zval_p)
+	Z_TYPE_PP(zval_pp)	=	Z_TYPE(**zval_pp)
+	
+[EXAMPLE CODE HERE]
+	
+Macros for Initializing zval pointers
+
+	Allocates data for the zval and sets the refcount to 1 and isref to 0
+	MAKE_STD_ZVAL(zval*)
+	
+	Allocates and initilizes the zval to IS_NULL
+	ALLOC_INIT_ZVAL(zval*)
+
+[EXAMPLE CODE HERE]	
+
+Macros for getting values out of zval's
+	
+Macros						Translation
+--------------				-----------
+Z_LVAL(zval)				(zval).value.lval
+Z_BVAL(zval)				((zend_bool)(zval).value.lval)
+Z_DVAL(zval)				(zval).value.dval
+Z_STRVAL(zval)				(zval).value.str.val
+Z_STRLEN(zval)				(zval).value.str.len
+Z_ARRVAL(zval)				(zval).value.ht
+Z_OBJVAL(zval)				(zval).value.obj
+Z_OBJ_HANDLE(zval)			Z_OBJVAL(zval).handle
+Z_OBJ_HT(zval)				Z_OBJVAL(zval).handlers
+Z_OBJCE(zval)				zend_get_class_entry(&(zval) TSRMLS_CC)
+Z_OBJPROP(zval)				Z_OBJ_HT((zval))->get_properties(&(zval) TSRMLS_CC)
+Z_OBJ_HANDLER(zval, hf) 	Z_OBJ_HT((zval))->hf
+Z_RESVAL(zval)				(zval).value.lval
+Z_OBJDEBUG(zval,is_tmp)		(Z_OBJ_HANDLER((zval),get_debug_info)?Z_OBJ_HANDLER((zval),get_debug_info)(&(zval),&is_tmp TSRMLS_CC):(is_tmp=0,Z_OBJ_HANDLER((zval),get_properties)?Z_OBJPROP(zval):NULL))
+
+Equivalent helper macros for indirect zval's like zval* and zval**
+
+zval*							zval**
+----------------				-----------------
+Z_LVAL_P(zval_p)				Z_LVAL_PP(zval_pp)
+Z_BVAL_P(zval_p)				Z_BVAL_PP(zval_pp)
+Z_DVAL_P(zval_p)				Z_DVAL_PP(zval_pp)
+Z_STRVAL_P(zval_p)				Z_STRVAL_PP(zval_pp)
+Z_STRLEN_P(zval_p)				Z_STRLEN_PP(zval_pp)
+Z_ARRVAL_P(zval_p)				Z_ARRVAL_PP(zval_pp)
+Z_OBJPROP_P(zval_p)				Z_OBJPROP_PP(zval_pp)
+Z_OBJCE_P(zval_p)				Z_OBJCE_PP(zval_pp)
+Z_RESVAL_P(zval_p)				Z_RESVAL_PP(zval_pp)
+Z_OBJVAL_P(zval_p)				Z_OBJVAL_PP(zval_pp)
+Z_OBJ_HANDLE_P(zval_p)			Z_OBJ_HANDLE_PP(zval_p)
+Z_OBJ_HT_P(zval_p)				Z_OBJ_HT_PP(zval_p)
+Z_OBJ_HANDLER_P(zval_p, h)		Z_OBJ_HANDLER_PP(zval_p, h
+Z_OBJDEBUG_P(zval_p,is_tmp)		Z_OBJDEBUG_PP(zval_pp,is_tmp)
+
+[EXAMPLE CODE HERE]
+
+
+5. Functions
+
+void zif_##name(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC);
+
+#define RETVAL_RESOURCE(l)				ZVAL_RESOURCE(return_value, l)
+#define RETVAL_BOOL(b)					ZVAL_BOOL(return_value, b)
+#define RETVAL_NULL() 					ZVAL_NULL(return_value)
+#define RETVAL_LONG(l) 					ZVAL_LONG(return_value, l)
+#define RETVAL_DOUBLE(d) 				ZVAL_DOUBLE(return_value, d)
+#define RETVAL_STRING(s, duplicate) 		ZVAL_STRING(return_value, s, duplicate)
+#define RETVAL_STRINGL(s, l, duplicate) 	ZVAL_STRINGL(return_value, s, l, duplicate)
+#define RETVAL_EMPTY_STRING() 			ZVAL_EMPTY_STRING(return_value)
+#define RETVAL_ZVAL(zv, copy, dtor)		ZVAL_ZVAL(return_value, zv, copy, dtor)
+#define RETVAL_FALSE  					ZVAL_BOOL(return_value, 0)
+#define RETVAL_TRUE   					ZVAL_BOOL(return_value, 1)
+
+#define RETURN_RESOURCE(l) 				{ RETVAL_RESOURCE(l); return; }
+#define RETURN_BOOL(b) 					{ RETVAL_BOOL(b); return; }
+#define RETURN_NULL() 					{ RETVAL_NULL(); return;}
+#define RETURN_LONG(l) 					{ RETVAL_LONG(l); return; }
+#define RETURN_DOUBLE(d) 				{ RETVAL_DOUBLE(d); return; }
+#define RETURN_STRING(s, duplicate) 	{ RETVAL_STRING(s, duplicate); return; }
+#define RETURN_STRINGL(s, l, duplicate) { RETVAL_STRINGL(s, l, duplicate); return; }
+#define RETURN_EMPTY_STRING() 			{ RETVAL_EMPTY_STRING(); return; }
+#define RETURN_ZVAL(zv, copy, dtor)		{ RETVAL_ZVAL(zv, copy, dtor); return; }
+#define RETURN_FALSE  					{ RETVAL_FALSE; return; }
+#define RETURN_TRUE   					{ RETVAL_TRUE; return; }
+
+
+6. Objects
+========================================================================
+
+The basic pattern is to extend zend_object in the C way
+
+struct 	my_object {
+    zend_object zo;
+    int a_private_integer_not_accesible_from_php;
+    my_data_type* custom_data;
+    void* anything;
+}
+
+When doing this in C++ you have to ensure the zend_object is in the
+beginning of the structure and that the compiler doesn't put any
+metadata in front (in other words (size_t)&object == (size_t)&object->zo
+must be true), probably an  extern "C"   declaration is needed.
+
+Then add a C/C++-level constructor and destructor:
+
+void my_object_free(void *object TSRMLS_DC) 
+{
+    struct my_object *intern = (struct my_object*)object;
+    free(intern->anything);
+    zend_object_std_dtor(&intern->zo TSRMLS_CC);
+    efree(intern);
+}
+
+zend_object_value my_object_new(zend_class_entry *class_type TSRMLS_DC)
+{
+    zend_object_value retval;
+    struct my_object* intern;
+    intern = emalloc(sizeof(struct my_oject));
+
+    zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+    object_properties_init(&intern->zo, class_type);
+
+    intern->a_private_integer_not_accesible_from_php = 42;
+    intern->anything = some_data;
+
+    retval.handle = zend_objects_store_put(intern, NULL, my_object_free, NULL TSRMLS_CC);
+
+    return retval;
+}
+
+Mind, again, they are called from C and might need extern "C" binding.
+
+Then register this with the class during MINIT:
+
+    INIT_CLASS_ENTRY(my_class_entry, "my_class", my_functions);
+    my_class_entry.create_object = my_object_new;
+    my_class_entry = zend_register_internal_class(&my_class_entry TSRMLS_CC);
+
+And then, whenever you get the object you can cast from zend_object* to
+my_object* and access the private data. Check the PHP source and OO PECL
+exts for occurrences of"create_object" to find samples.
+
+For example:
+============
+object_init_ex(return_value, object_class_entry);
+my_object = (my_object_type *)zend_object_store_get_object(return_value TSRMLS_CC);
+my_object->custom_property = some_value;
+my_object->other_custom_is_constructed = TRUE;
+
+
+
+
+
+
