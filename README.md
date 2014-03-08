@@ -23,7 +23,7 @@ Small manual that explains how to develop a PHP extension.
 
 <li><a href="introduction.md">Introduction</a></li><br />
 	
-<li><a href="building-php.md">Building PHP</a></li><br />
+<li><a href="building-php.md">Building PHP</a></li>
 
     <ul>
         <li><a href="building-php-linux.md">Linux</a></li><br />
@@ -33,12 +33,12 @@ Small manual that explains how to develop a PHP extension.
         <li><a href="building-php-mac.md">Mac</a></li><br />
     </ul>
 	
-<li><a href="extensions-skeleton.md">Extensions Skeleton</a></li><br />
+<li><a href="extensions-skeleton.md">Extensions Skeleton</a></li>
 
     <ul>
         <li><a href="exntensions-m4.md">Unix configuration file</a></li><br />
         <li><a href="extensions-w32.md">Windows configuration file</a></li><br />
-        <li><a href="extensions-building.md">Building the exension</a></li><br />
+        <li><a href="extensions-building.md">Building the exension</a></li>
         
         <ul>
             <li><a href="extensions-building-unix.md">Unix</a></li><br />
@@ -46,7 +46,7 @@ Small manual that explains how to develop a PHP extension.
         </ul>
     </ul>
 	
-<li><a href="variables.md">Variables</a></li><br />
+<li><a href="variables.md">Variables</a></li>
 
     <ul>
 		<li><a href="variables-arrays.md">Arrays</a></li><br />
@@ -55,7 +55,7 @@ Small manual that explains how to develop a PHP extension.
     </ul>
 		
 		
-<li><a href="functions.md">Functions</a></li><br />
+<li><a href="functions.md">Functions</a></li>
 
     <ul>
         <li><a href="functions-parameters.md">Working with Parameters</a></li><br />
