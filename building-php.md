@@ -1,20 +1,3 @@
-<table style="width: 100%;">
-    <tr>
-        <td align="left" width="33%">
-            <a href="introduction.md">&lt;&lt; Introduction</a>
-        </td>
-        
-        <td align="center" width="33%">
-            <a href="README.md">Table of Contents</a>
-        </td>
-        
-        <td align="right" width="33%">
-            <a href="building-php-linux.md">Linux &gt;&gt;</a>
-        </td>
-    </tr>
-</table>
-------------------------------------------------------------------------
-
 # Building PHP
 ========================================================================
 
@@ -33,10 +16,10 @@ then you should install a C++ compiler as well.
 	debugging with tools like valgrind and gdb.
 
 ------------------------------------------------------------------------
-<table width="100%">
+<table style="width: 100%;">
     <tr>
         <td align="left" width="33%">
-            
+            <a href="introduction.md">&lt;&lt; Introduction</a>
         </td>
         
         <td align="center" width="33%">
@@ -44,7 +27,7 @@ then you should install a C++ compiler as well.
         </td>
         
         <td align="right" width="33%">
-            <a href="">Building PHP &gt;&gt;</a>
+            <a href="building-php-linux.md">Building on Linux &gt;&gt;</a>
         </td>
     </tr>
 </table>
