@@ -23,7 +23,8 @@ Small manual that explains how to develop a PHP extension.
 
 <li><a href="introduction.md">Introduction</a></li>
 	
-<li><a href="building-php.md">Building PHP</a></li>
+<li>
+    <a href="building-php.md">Building PHP</a>
 
     <ul>
         <li><a href="building-php-linux.md">Linux</a></li>
@@ -32,35 +33,45 @@ Small manual that explains how to develop a PHP extension.
     
         <li><a href="building-php-mac.md">Mac</a></li>
     </ul>
+</li>
 	
-<li><a href="extensions-skeleton.md">Extensions Skeleton</a></li>
+<li>
+    <a href="extensions-skeleton.md">Extensions Skeleton</a>
 
     <ul>
         <li><a href="exntensions-m4.md">Unix configuration file</a></li>
         <li><a href="extensions-w32.md">Windows configuration file</a></li>
-        <li><a href="extensions-building.md">Building the exension</a></li>
+        <li>
+            <a href="extensions-building.md">Building the exension</a>
         
-        <ul>
-            <li><a href="extensions-building-unix.md">Unix</a></li>
-            <li><a href="extensions-building-windows.md">Windows</a></li>
-        </ul>
+            <ul>
+                <li><a href="extensions-building-unix.md">Unix</a></li>
+                <li><a href="extensions-building-windows.md">Windows</a></li>
+            </ul>
+        </li>
     </ul>
+    
+</li>
 	
-<li><a href="variables.md">Variables</a></li>
+<li>
+    <a href="variables.md">Variables</a>
 
     <ul>
 		<li><a href="variables-arrays.md">Arrays</a></li>
 		<li><a href="variables-resources.md">Resources</a></li>
 		<li><a href="variables-objects.md">Objects</a></li>
     </ul>
+</li>
 		
 		
-<li><a href="functions.md">Functions</a></li>
+<li>
+    <a href="functions.md">Functions</a>
 
     <ul>
         <li><a href="functions-parameters.md">Working with Parameters</a></li>
         <li><a href="functions-return.md">Returning Values</a></li>
     </ul>
+</li>
 	
 <li><a href="classes.md">Classes</a></li>
 	
