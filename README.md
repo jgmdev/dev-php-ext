@@ -1,4 +1,4 @@
-<table style="width: 100%;" width="100%" class="markdown-body">
+<table width="500px">
     <tr>
         <td align="left" width="33%">
             
