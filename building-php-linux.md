@@ -1,5 +1,4 @@
 # Building on Linux
-========================================================================
 
 There are two ways on which you can get everything needed to start
 developing on Linux. Use pre-compiled packages provided by your preferred

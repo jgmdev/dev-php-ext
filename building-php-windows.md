@@ -1,5 +1,4 @@
 # Windows
-========================================================================
 
 PHP building system on Windows almost emulates or mimics the autotools
 system used on unix systems to build software. This is done by a set of
@@ -19,7 +18,6 @@ MingW or Clang aren't supported. Fortunately Microsoft has released a
 set of free tools to develop on the Windows operating system. 
 
 ## Requirements
-========================================================================
 
 Here is what you will need to install in order to successfully compile 
 PHP for windows:
@@ -65,7 +63,6 @@ So download the latest version as it should work with either PHP 5.3
 or 5.4 and follow the Steps to Build that explain how to use this file.
 	
 ## Steps to Build
-========================================================================
 
 By now you should have everything needed to start so here is the list 
 of steps needed:

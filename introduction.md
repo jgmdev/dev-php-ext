@@ -1,5 +1,4 @@
 # Introduction
-========================================================================
 
 This document is a short tutorial and brief reference on how to develop
 PHP extensions/modules.
