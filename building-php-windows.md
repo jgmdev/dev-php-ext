@@ -1,4 +1,4 @@
-# Windows
+# Building on Windows
 
 PHP building system on Windows almost emulates or mimics the autotools
 system used on unix systems to build software. This is done by a set of

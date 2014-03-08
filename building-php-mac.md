@@ -1,4 +1,4 @@
-# Mac
+# Building on Mac
 
 New versions of Mac OSX already ship with PHP as PHP development tools.
 You will only need to install Xcode in order to have a working compiler
